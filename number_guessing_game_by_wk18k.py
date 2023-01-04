@@ -403,7 +403,20 @@ class HelpGame(ft.UserControl):
 
     def __init__(self):
         super().__init__()
-        with open("how_to_play.md", "r", encoding="utf-8") as f:
+        import os
+        import sys
+
+        def resource_path(relative_path):
+            """Get absolute path to resource, works for dev and for PyInstaller"""
+            try:
+                # PyInstaller creates a temp folder and stores path in _MEIPASS
+                base_path = sys._MEIPASS
+            except Exception:
+                base_path = os.path.abspath(".")
+            return os.path.join(base_path, relative_path)
+
+        self.path_markdown = resource_path("src/how_to_play.md")
+        with open(self.path_markdown, "r", encoding="utf-8") as f:
             self.filemarkdown = f.read()
         self.markdown_help = ft.Markdown(
             self.filemarkdown,
