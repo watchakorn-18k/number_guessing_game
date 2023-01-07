@@ -200,8 +200,7 @@ class GamePlay(ft.UserControl):
                 [ft.Text("เหลือเวลาอีก"), self.clock],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             ),
-            padding=ft.padding.only(top=10, bottom=10)
-            # alignment=ft.alignment.bottom_right,
+            padding=ft.padding.only(top=10, bottom=10),
         )
         self.section_input = ft.Container(
             content=ft.Column(
@@ -576,9 +575,6 @@ def main(page: ft.Page):
                     )
 
                     game_play.show_score.value = game_play.score
-                # elif game_play.score == 1:
-                #     game_play.score = 0
-                #     game_play.show_score.value = game_play.score
 
             check_score()
 
@@ -619,7 +615,7 @@ def main(page: ft.Page):
         """
         page.window_destroy()
 
-    # setup_center_pos_window()
+    setup_center_pos_window()
     page.window_to_front()
     page.fonts = {
         "Kanit": "https://raw.githubusercontent.com/google/fonts/master/ofl/kanit/Kanit-Bold.ttf",
