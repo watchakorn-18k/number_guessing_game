@@ -462,6 +462,182 @@ class HelpGame(ft.UserControl):
         )
 
 
+class Score_add(ft.UserControl):
+    """
+    สำหรับเข้าสู่หน้าเพิ่มชื่อคะแนน
+    """
+
+    def __init__(self):
+        super().__init__()
+        import os
+        import sys
+
+        self.banner_img = ft.Image(
+            src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
+            width=50,
+            height=50,
+            fit=ft.ImageFit.CONTAIN,
+        )
+        self.label_show_1 = ft.Text(
+            "คะแนนของคุณคือ",
+            size=25,
+        )
+        self.score_show_1 = ft.Text("5", size=78)
+        self.content = ft.Column(
+            [self.label_show_1, self.score_show_1],
+            horizontal_alignment="center",
+        )
+        self.input_name_player = ft.TextField(
+            label="กรอกชื่อผู้เล่น",
+            width=200,
+            max_length=10,
+            max_lines=1,
+            multiline=False,
+            prefix_icon=ft.icons.PERSON_ADD,
+        )
+        self.btn_submit = ft.ElevatedButton(
+            content=ft.Text(
+                "ส่งชื่อลงบอร์ด",
+                size=20,
+            ),
+            width=200,
+            style=self.btn_style(ft.colors.BLUE, ft.colors.BLUE_900, 300),
+        )
+        self.btn_back = ft.ElevatedButton(
+            content=ft.Text(
+                "กลับไปหน้าแรก",
+                size=20,
+            ),
+            width=200,
+            style=self.btn_style(ft.colors.RED, ft.colors.RED_900, 300),
+        )
+
+        self.container_main = ft.Container(
+            content=ft.Column(
+                [
+                    ft.Container(
+                        content=ft.Column(
+                            [
+                                self.banner_img,
+                                self.content,
+                                self.input_name_player,
+                                self.btn_submit,
+                                self.btn_back,
+                            ],
+                            horizontal_alignment="center",
+                        ),
+                        alignment=ft.alignment.center,
+                    )
+                ]
+            )
+        )
+
+    def btn_style(self, color1, color2, time):
+        return ft.ButtonStyle(
+            color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
+            bgcolor={
+                ft.MaterialState.DEFAULT.value: color1,
+                ft.MaterialState.HOVERED.value: color2,
+            },
+            animation_duration=time,
+        )
+
+
+class Scoreboard_scene(ft.UserControl):
+    """
+    สำหรับเข้าสู่หน้าเพิ่มชื่อคะแนน
+    """
+
+    def __init__(self):
+        super().__init__()
+        import os
+        import sys
+
+        self.banner_img = ft.Image(
+            src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
+            width=50,
+            height=50,
+            fit=ft.ImageFit.CONTAIN,
+        )
+        self.rank_text = ft.Text("#1", size=18, color=ft.colors.BLACK87)
+        self.name_text = ft.Text("#######", size=18, color=ft.colors.BLACK87)
+        self.score_text = ft.Text("50", size=18, color=ft.colors.BLACK87)
+        self.player_rank_first = ft.Container(
+            content=ft.Row(
+                [self.rank_text, self.name_text, self.score_text],
+                alignment="spaceBetween",
+            ),
+            bgcolor=ft.colors.WHITE,
+            padding=20,
+            border_radius=22,
+        )
+        self.data_list_player_rank = ft.Row(
+            [
+                self.rank_text,
+                self.name_text,
+                self.score_text,
+            ],
+            alignment="spaceBetween",
+        )
+
+        def resutl_data_list_player_rank(number_data: int):
+            lists = []
+            for i in range(number_data):
+                lists.append(self.data_list_player_rank)
+            return lists
+
+        self.list_player_rank = ft.Container(
+            content=ft.Column(resutl_data_list_player_rank(10)),
+            bgcolor=ft.colors.WHITE,
+            padding=20,
+            border_radius=22,
+        )
+        self.label_show_2 = ft.Text(
+            "กระดานแสดงคะแนนผู้นำ",
+            size=25,
+        )
+        self.content = ft.Column(
+            [self.label_show_2, self.player_rank_first, self.list_player_rank],
+            horizontal_alignment="center",
+        )
+        self.btn_back = ft.ElevatedButton(
+            content=ft.Text(
+                "กลับไปหน้าแรก",
+                size=20,
+            ),
+            width=200,
+            style=self.btn_style(ft.colors.RED, ft.colors.RED_900, 300),
+        )
+
+        self.container_main = ft.Container(
+            content=ft.Column(
+                [
+                    ft.Container(
+                        content=ft.Column(
+                            [
+                                self.banner_img,
+                                self.content,
+                                self.btn_back,
+                            ],
+                            horizontal_alignment="center",
+                        ),
+                        alignment=ft.alignment.center,
+                    )
+                ]
+            )
+        )
+
+    def btn_style(self, color1, color2, time):
+        return ft.ButtonStyle(
+            color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
+            bgcolor={
+                ft.MaterialState.DEFAULT.value: color1,
+                ft.MaterialState.HOVERED.value: color2,
+            },
+            animation_duration=time,
+        )
+
+
 def main(page: ft.Page):
     viewport_width, viewport_height = pyautogui.size()
     window_width, window_height = (500, 925)
@@ -615,7 +791,7 @@ def main(page: ft.Page):
         """
         page.window_destroy()
 
-    setup_center_pos_window()
+    # setup_center_pos_window()
     page.window_to_front()
     page.fonts = {
         "Kanit": "https://raw.githubusercontent.com/google/fonts/master/ofl/kanit/Kanit-Bold.ttf",
@@ -629,9 +805,13 @@ def main(page: ft.Page):
     menu_game = MenuGame()
     level_scene = LevelGame()
     help_scene = HelpGame()
+    score_add_scene = Score_add()
+    scoreboard_scene = Scoreboard_scene()
     menu_game_all = menu_game.container_main
     level_scene_all = level_scene.container_main
     help_scene_all = help_scene.container_main
+    score_add_all = score_add_scene.container_main
+    scoreboard_scene_all = scoreboard_scene.container_main
 
     def run_game_normal():
         """
@@ -672,10 +852,11 @@ def main(page: ft.Page):
         setup_play_scene()
 
         # test
-        # page.add(level_scene_all)
+        page.add(score_add_all)
+        # page.add(scoreboard_scene_all)
 
         # initial start one above all
-        page.add(menu_game_all)
+        # page.add(menu_game_all)
 
     run_game_normal()
 
