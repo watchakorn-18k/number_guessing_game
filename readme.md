@@ -37,3 +37,7 @@ v0.2
 - [x] เพิ่ม GUI ให้ผู้เล่นกรอกชื่อหลังจากจบเกม ![img](https://media.discordapp.net/attachments/585069498986397707/1062448787701895198/image.png?width=362&height=671)
 
 - [x] เพิ่ม GUI scoreboard ![img](https://media.discordapp.net/attachments/585069498986397707/1062448734300012615/image.png?width=364&height=671)
+
+- [x] เพิ่ม DEBUG ![img](https://media.discordapp.net/attachments/372372440334073859/1062818213718663249/image.png?width=371&height=670)
+
+- [x] เชื่อมหน้า ตารางคะแนน และ หน้าเพิ่มคะแนน ต่างๆกับปุ่ม ![img](https://cdn.discordapp.com/attachments/372372440334073859/1062818784878014545/gamedfdsf.gif)

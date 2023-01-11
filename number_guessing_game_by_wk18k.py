@@ -100,6 +100,13 @@ class GamePlay(ft.UserControl):
             "เดาให้ถูกหากคุณแน่จริง", size=25, text_align="center"
         )
 
+        def set_time_out(e):
+            self.clock.timeout = True
+
+        self.debug_set_time_out = ft.ElevatedButton(
+            text="TIME_OUT", on_click=set_time_out
+        )
+
     def did_mount(self):
         self.running = True
         self.th = threading.Thread(target=self.update_forever, args=(), daemon=True)
@@ -227,11 +234,18 @@ class GamePlay(ft.UserControl):
             ),
             alignment=ft.alignment.center,
         )
+        self.debug = ft.Container(
+            content=ft.Column(
+                [ft.Text("DEBUG"), ft.Row([self.debug_set_time_out])],
+                horizontal_alignment="center",
+            )
+        )
         self.section_time.alignment = ft.alignment.Alignment(-2.0, -10.5)
         self.section_result.padding = 10
         return ft.Column(
             [
                 self.section_input,
+                self.debug,
                 self.section_result,
             ]
         )
@@ -255,6 +269,14 @@ class MenuGame(ft.UserControl):
             width=200,
             style=self.btn_style(ft.colors.GREEN, ft.colors.GREEN_900, 300),
             on_click=self.run_play,
+        )
+        self.btn_scoreboard = ft.ElevatedButton(
+            content=ft.Text(
+                "ตารางคะแนน",
+                size=20,
+            ),
+            width=200,
+            style=self.btn_style(ft.colors.YELLOW_800, ft.colors.YELLOW_900, 300),
         )
         self.btn_help = ft.ElevatedButton(
             content=ft.Text(
@@ -287,6 +309,7 @@ class MenuGame(ft.UserControl):
                                     padding=ft.padding.only(bottom=20),
                                 ),
                                 self.btn_start,
+                                self.btn_scoreboard,
                                 self.btn_help,
                                 self.btn_exit,
                             ],
@@ -670,6 +693,22 @@ def main(page: ft.Page):
         page.add(help_scene_all)
         page.remove(menu_game_all)
 
+    def go_to_scoreboard_Scene(e):
+        """
+        change scene to scoreboard scene
+        """
+        page.remove(menu_game_all)
+        page.add(scoreboard_scene_all)
+        page.update()
+
+    def go_to_score_add_Scene(e):
+        """
+        change scene to add score scene
+        """
+        page.remove(game_play)
+        page.add(score_add_all)
+        page.update()
+
     def back_to_menu_main_from_levelScene(e):
         """
         change to menu scene
@@ -683,6 +722,22 @@ def main(page: ft.Page):
         """
         page.add(menu_game_all)
         page.remove(help_scene_all)
+
+    def back_to_menu_main_from_scoreboard_Scene(e):
+        """
+        change to menu scene
+        """
+        page.add(menu_game_all)
+        page.remove(scoreboard_scene_all)
+        page.update()
+
+    def back_to_menu_main_from_score_add_Scene(e):
+        """
+        change to menu scene
+        """
+        page.add(menu_game_all)
+        page.remove(score_add_all)
+        page.update()
 
     def back_to_menu_main_from_gameplay_Scene(e):
         """
@@ -824,6 +879,7 @@ def main(page: ft.Page):
             """
             menu_game.btn_start.on_click = go_to_levelScene
             menu_game.btn_help.on_click = go_to_help_Scene
+            menu_game.btn_scoreboard.on_click = go_to_scoreboard_Scene
             menu_game.btn_exit.on_click = exit_game
 
         def setup_menu_level_scene():
@@ -840,23 +896,39 @@ def main(page: ft.Page):
             help_scene.btn_back.on_click = back_to_menu_main_from_help_Scene
             help_scene.markdown_help.on_tap_link = lambda e: page.launch_url(e.data)
 
+        def setup_menu_scoreboard_scene():
+            """
+            Setup ของหน้า scoreboard
+            """
+            scoreboard_scene.btn_back.on_click = back_to_menu_main_from_scoreboard_Scene
+
+        def setup_menu_add_score_scene():
+            """
+            Setup ของหน้า scoreboard
+            """
+            score_add_scene.btn_back.on_click = back_to_menu_main_from_score_add_Scene
+
         def setup_play_scene():
             """
             Setup ของหน้าเล่นเกมหลัก
             """
-            game_play.back_to_main.on_click = back_to_menu_main_from_gameplay_Scene
+            game_play.back_to_main.on_click = go_to_score_add_Scene
 
+        # /////// START SETUP ////////
         setup_menu_main_scene()
         setup_menu_level_scene()
         setup_menu_help_scene()
+        setup_menu_scoreboard_scene()
+        setup_menu_add_score_scene()
         setup_play_scene()
+        # ///////////////////////////
 
         # test
-        page.add(score_add_all)
+        # page.add(score_add_all)
         # page.add(scoreboard_scene_all)
 
         # initial start one above all
-        # page.add(menu_game_all)
+        page.add(menu_game_all)
 
     run_game_normal()
 
