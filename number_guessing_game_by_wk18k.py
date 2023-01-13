@@ -645,6 +645,7 @@ class Scoreboard_scene(ft.UserControl):
         self.rank_1_score = ft.Text(
             self.data_query[0][1], size=18, color=ft.colors.YELLOW_800
         )
+        self.lists = []
         self.rank_1_rank = ft.Text("#1", size=18, color=ft.colors.YELLOW_800)
         self.player_rank_first = ft.Container(
             content=ft.Row(
@@ -698,7 +699,7 @@ class Scoreboard_scene(ft.UserControl):
         )
 
     def resutl_data_list_player_rank(self):
-        lists = []
+
         self.data_query
         for index, row in enumerate(self.data_query[1:10]):
             if row[1] != max(qurty_database()):
@@ -710,7 +711,7 @@ class Scoreboard_scene(ft.UserControl):
                 self.name_text = ft.Text(row[0], size=18, color=ft.colors.BLACK87)
                 self.score_text = ft.Text(row[1], size=18, color=ft.colors.BLACK87)
 
-            lists.append(
+            self.lists.append(
                 ft.Row(
                     [
                         self.rank_text,
@@ -722,7 +723,7 @@ class Scoreboard_scene(ft.UserControl):
             )
             print(f"Name: , Score: {row[1]}")
 
-        return lists
+        return self.lists
 
     def btn_style(self, color1, color2, time):
         return ft.ButtonStyle(
@@ -773,7 +774,6 @@ def main(page: ft.Page):
         """
         page.remove(menu_game_all)
         page.add(scoreboard_scene_all)
-        scoreboard_scene.resutl_data_list_player_rank()
         page.update()
 
     def go_to_score_add_Scene(e):
@@ -819,7 +819,7 @@ def main(page: ft.Page):
                     def go_to_scoreboard(e):
                         page.remove(score_add_all)
                         page.add(scoreboard_scene_all)
-                        scoreboard_scene.resutl_data_list_player_rank()
+
                         page.update()
 
                     go_to_scoreboard(e)
