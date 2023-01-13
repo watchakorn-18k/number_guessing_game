@@ -42,4 +42,6 @@ v0.2
 
 - [x] เชื่อมหน้า ตารางคะแนน และ หน้าเพิ่มคะแนน ต่างๆกับปุ่ม ![img](https://cdn.discordapp.com/attachments/372372440334073859/1062818784878014545/gamedfdsf.gif)
 
-- [x] เพิ่มระบบ ตารางคะแนน และ หน้าเพิ่มคะแนน ![img](https://media.discordapp.net/attachments/585069498986397707/1063587147329835119/image.png?width=366&height=671) ![img](https://media.discordapp.net/attachments/585069498986397707/1063580207484772352/image.png?width=360&height=671)
+- [x] เพิ่มระบบ ตารางคะแนน และ หน้าเพิ่มคะแนน
+      ![img](https://media.discordapp.net/attachments/585069498986397707/1063587147329835119/image.png?width=366&height=671)
+      ![img](https://media.discordapp.net/attachments/585069498986397707/1063580207484772352/image.png?width=360&height=671)
