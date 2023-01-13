@@ -4,8 +4,58 @@ import random
 import pyautogui
 import threading
 import time
-from importlib import reload
-from pynput.keyboard import Key, Listener
+
+
+# DATABASE #
+import sqlite3
+
+
+def create_database():
+    # Connect to or create the database
+    conn = sqlite3.connect("storage.db")
+
+    # Create a cursor object
+    c = conn.cursor()
+    # Execute a query to create a table
+    c.execute(
+        """CREATE TABLE players (id INTEGER PRIMARY KEY, name TEXT, score INTEGER)"""
+    )
+
+    # Insert data into the table
+    c.execute("INSERT INTO players (name, score) VALUES ('WK', 10)")
+    c.execute("INSERT INTO players (name, score) VALUES ('AC', 2)")
+    c.execute("INSERT INTO players (name, score) VALUES ('DW', 5)")
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def qurty_database():
+    conn = sqlite3.connect("storage.db")
+
+    # Create a cursor object
+    c = conn.cursor()
+
+    # Execute a query to sort by score in descending order
+    c.execute("SELECT name, score FROM players ORDER BY score DESC")
+
+    # Fetch all the results
+    results = c.fetchall()
+
+    # Close the connection
+    return results
+
+
+def check_database():
+    import os
+
+    if not os.path.exists("storage.db"):
+        create_database()
+
+
+check_database()
+# END DATABASE #
 
 
 class Countdown(ft.UserControl):
@@ -245,7 +295,7 @@ class GamePlay(ft.UserControl):
         return ft.Column(
             [
                 self.section_input,
-                self.debug,
+                # self.debug,
                 self.section_result,
             ]
         )
@@ -505,7 +555,7 @@ class Score_add(ft.UserControl):
             "คะแนนของคุณคือ",
             size=25,
         )
-        self.score_show_1 = ft.Text("5", size=78)
+        self.score_show_1 = ft.Text("0", size=78)
         self.content = ft.Column(
             [self.label_show_1, self.score_show_1],
             horizontal_alignment="center",
@@ -535,6 +585,8 @@ class Score_add(ft.UserControl):
             style=self.btn_style(ft.colors.RED, ft.colors.RED_900, 300),
         )
 
+        self.text_show = ft.Text(text_align="center")
+
         self.container_main = ft.Container(
             content=ft.Column(
                 [
@@ -544,6 +596,7 @@ class Score_add(ft.UserControl):
                                 self.banner_img,
                                 self.content,
                                 self.input_name_player,
+                                self.text_show,
                                 self.btn_submit,
                                 self.btn_back,
                             ],
@@ -576,6 +629,7 @@ class Scoreboard_scene(ft.UserControl):
         import os
         import sys
 
+        self.data_query = qurty_database()
         self.banner_img = ft.Image(
             src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
             width=50,
@@ -585,32 +639,25 @@ class Scoreboard_scene(ft.UserControl):
         self.rank_text = ft.Text("#1", size=18, color=ft.colors.BLACK87)
         self.name_text = ft.Text("#######", size=18, color=ft.colors.BLACK87)
         self.score_text = ft.Text("50", size=18, color=ft.colors.BLACK87)
+        self.rank_1_name = ft.Text(
+            self.data_query[0][0], size=18, color=ft.colors.YELLOW_800
+        )
+        self.rank_1_score = ft.Text(
+            self.data_query[0][1], size=18, color=ft.colors.YELLOW_800
+        )
+        self.rank_1_rank = ft.Text("#1", size=18, color=ft.colors.YELLOW_800)
         self.player_rank_first = ft.Container(
             content=ft.Row(
-                [self.rank_text, self.name_text, self.score_text],
+                [self.rank_1_rank, self.rank_1_name, self.rank_1_score],
                 alignment="spaceBetween",
             ),
             bgcolor=ft.colors.WHITE,
             padding=20,
             border_radius=22,
         )
-        self.data_list_player_rank = ft.Row(
-            [
-                self.rank_text,
-                self.name_text,
-                self.score_text,
-            ],
-            alignment="spaceBetween",
-        )
-
-        def resutl_data_list_player_rank(number_data: int):
-            lists = []
-            for i in range(number_data):
-                lists.append(self.data_list_player_rank)
-            return lists
 
         self.list_player_rank = ft.Container(
-            content=ft.Column(resutl_data_list_player_rank(10)),
+            content=ft.Column(self.resutl_data_list_player_rank()),
             bgcolor=ft.colors.WHITE,
             padding=20,
             border_radius=22,
@@ -649,6 +696,33 @@ class Scoreboard_scene(ft.UserControl):
                 ]
             )
         )
+
+    def resutl_data_list_player_rank(self):
+        lists = []
+        self.data_query
+        for index, row in enumerate(self.data_query[1:10]):
+            if row[1] != max(qurty_database()):
+                self.rank_text = ft.Text(
+                    index + 2,
+                    size=18,
+                    color=ft.colors.BLACK87,
+                )
+                self.name_text = ft.Text(row[0], size=18, color=ft.colors.BLACK87)
+                self.score_text = ft.Text(row[1], size=18, color=ft.colors.BLACK87)
+
+            lists.append(
+                ft.Row(
+                    [
+                        self.rank_text,
+                        self.name_text,
+                        self.score_text,
+                    ],
+                    alignment="spaceBetween",
+                )
+            )
+            print(f"Name: , Score: {row[1]}")
+
+        return lists
 
     def btn_style(self, color1, color2, time):
         return ft.ButtonStyle(
@@ -699,14 +773,61 @@ def main(page: ft.Page):
         """
         page.remove(menu_game_all)
         page.add(scoreboard_scene_all)
+        scoreboard_scene.resutl_data_list_player_rank()
         page.update()
 
     def go_to_score_add_Scene(e):
         """
         change scene to add score scene
         """
+
+        def change_value_text():
+            # change score show to current score
+            score_add_scene.score_show_1.value = game_play.score
+
+        change_value_text()
         page.remove(game_play)
-        page.add(score_add_all)
+        if game_play.score != 0:
+            page.add(score_add_all)
+        else:
+            page.add(menu_game_all)
+        page.update()
+
+    def go_to_keep_data_to_database_then_go_2_scoreboard(e):
+        game_play.score += 5 * 1
+        if score_add_scene.input_name_player.value != "":
+            try:
+                if (
+                    game_play.score != 0
+                    and score_add_scene.input_name_player.value != ""
+                ):
+                    # Connect to or create the database
+                    conn = sqlite3.connect("storage.db")
+
+                    # Create a cursor object
+                    c = conn.cursor()
+                    c.execute(
+                        "INSERT INTO players (name, score) VALUES (?, ?)",
+                        (score_add_scene.input_name_player.value, game_play.score),
+                    )
+                    # Commit the changes and close the connection
+                    conn.commit()
+                    conn.close()
+                    score_add_scene.text_show.value = "บันทึกข้อมูลเรียบร้อย"
+                    score_add_scene.text_show.color = ft.colors.GREEN
+
+                    def go_to_scoreboard(e):
+                        page.remove(score_add_all)
+                        page.add(scoreboard_scene_all)
+                        scoreboard_scene.resutl_data_list_player_rank()
+                        page.update()
+
+                    go_to_scoreboard(e)
+            except UnicodeEncodeError:
+                pass
+        else:
+            score_add_scene.text_show.value = "กรุณากรอกชื่อ"
+            score_add_scene.text_show.color = ft.colors.RED
         page.update()
 
     def back_to_menu_main_from_levelScene(e):
@@ -729,6 +850,7 @@ def main(page: ft.Page):
         """
         page.add(menu_game_all)
         page.remove(scoreboard_scene_all)
+
         page.update()
 
     def back_to_menu_main_from_score_add_Scene(e):
@@ -906,6 +1028,9 @@ def main(page: ft.Page):
             """
             Setup ของหน้า scoreboard
             """
+            score_add_scene.btn_submit.on_click = (
+                go_to_keep_data_to_database_then_go_2_scoreboard
+            )
             score_add_scene.btn_back.on_click = back_to_menu_main_from_score_add_Scene
 
         def setup_play_scene():
@@ -921,6 +1046,7 @@ def main(page: ft.Page):
         setup_menu_scoreboard_scene()
         setup_menu_add_score_scene()
         setup_play_scene()
+        page.update()
         # ///////////////////////////
 
         # test
@@ -928,10 +1054,10 @@ def main(page: ft.Page):
         # page.add(scoreboard_scene_all)
 
         # initial start one above all
+
         page.add(menu_game_all)
 
     run_game_normal()
-
     page.update()
 
 
