@@ -23,4 +23,5 @@ print(qurty_database()[0][1])
 # for row in qurty_database():
 #     print(f"Name: {row[0]}, Score: {row[1]}")
 
+
 print(qurty_database()[1:])

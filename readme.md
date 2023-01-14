@@ -59,3 +59,8 @@ v0.2
 <p align="center"><img src="https://media.discordapp.net/attachments/585069498986397707/1063587147329835119/image.png?width=366&height=671">
 <img src="https://media.discordapp.net/attachments/585069498986397707/1063580207484772352/image.png?width=360&height=671">
 </p>
+
+- [x] ทำให้หน้า scoreboard อัพเดทข้อมูลหลังจากกดปุ่มเข้าหน้า scoreboard
+
+<p align="center"><img src="https://cdn.discordapp.com/attachments/585069498986397707/1063652985944674334/gamedfdsf.gif">
+</p>

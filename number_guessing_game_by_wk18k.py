@@ -658,7 +658,7 @@ class Scoreboard_scene(ft.UserControl):
         )
 
         self.list_player_rank = ft.Container(
-            content=ft.Column(self.resutl_data_list_player_rank()),
+            content=ft.Column(),
             bgcolor=ft.colors.WHITE,
             padding=20,
             border_radius=22,
@@ -699,8 +699,7 @@ class Scoreboard_scene(ft.UserControl):
         )
 
     def resutl_data_list_player_rank(self):
-
-        self.data_query
+        self.data_query = qurty_database()
         for index, row in enumerate(self.data_query[1:10]):
             if row[1] != max(qurty_database()):
                 self.rank_text = ft.Text(
@@ -721,7 +720,6 @@ class Scoreboard_scene(ft.UserControl):
                     alignment="spaceBetween",
                 )
             )
-            print(f"Name: , Score: {row[1]}")
 
         return self.lists
 
@@ -774,6 +772,13 @@ def main(page: ft.Page):
         """
         page.remove(menu_game_all)
         page.add(scoreboard_scene_all)
+        qurty_database()
+        scoreboard_scene.list_player_rank.content = ft.Column(
+            scoreboard_scene.resutl_data_list_player_rank()
+        )
+        scoreboard_scene.rank_1_name.value = qurty_database()[0][0]
+        scoreboard_scene.rank_1_score.value = qurty_database()[0][1]
+
         page.update()
 
     def go_to_score_add_Scene(e):
@@ -819,6 +824,14 @@ def main(page: ft.Page):
                     def go_to_scoreboard(e):
                         page.remove(score_add_all)
                         page.add(scoreboard_scene_all)
+                        qurty_database()
+                        scoreboard_scene.list_player_rank.content = ft.Column(
+                            scoreboard_scene.resutl_data_list_player_rank()
+                        )
+                        scoreboard_scene.rank_1_name.value = qurty_database()[0][0]
+                        scoreboard_scene.rank_1_score.value = qurty_database()[0][1]
+                        score_add_scene.input_name_player.value = ""
+                        score_add_scene.text_show.value = ""
 
                         page.update()
 
@@ -850,6 +863,7 @@ def main(page: ft.Page):
         """
         page.add(menu_game_all)
         page.remove(scoreboard_scene_all)
+        scoreboard_scene.lists.clear()
 
         page.update()
 
@@ -859,6 +873,8 @@ def main(page: ft.Page):
         """
         page.add(menu_game_all)
         page.remove(score_add_all)
+        score_add_scene.input_name_player.value = ""
+        score_add_scene.text_show.value = ""
         page.update()
 
     def back_to_menu_main_from_gameplay_Scene(e):
@@ -876,6 +892,7 @@ def main(page: ft.Page):
         game_play.replay.disabled = False
         game_play.score = 0
         game_play.show_score.value = 0
+        game_play.score_combo = 0
         modes = [
             "",
             {
