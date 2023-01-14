@@ -33,7 +33,7 @@ v0.1
 v0.2
 
 - [ ] แก้ไขสีบอกระดับความยากของวิธีเล่น
-- [x] เพิ่มระบบ score board
+- [x] เพิ่มระบบ score board โดยใช้ sqlite เป็นฐานข้อมูล
 - [x] เพิ่ม GUI ให้ผู้เล่นกรอกชื่อหลังจากจบเกม
 
 <p align="center"><img src="https://media.discordapp.net/attachments/585069498986397707/1062448787701895198/image.png?width=362&height=671">
