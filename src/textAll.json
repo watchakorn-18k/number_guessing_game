@@ -1,0 +1,146 @@
+{
+    "how_to_play": {
+        "english": "How to Play",
+        "thai": "วิธีเล่นเกมทายเลข"
+    },
+    "detail_how_to_play": {
+        "english": "This game is not difficult to play. All you have to do is guess the right number to get points. There is a time limit, and when the time runs out, the game will end automatically. The numbers will be randomly generated each time the player starts the game or starts a new game. Every time you start a new game, a new number will be generated and half of the score will be deducted.",
+        "thai": "การเล่นเกมนี้ไม่ยากมาก แค่ทายตัวเลขให้ถูก จะได้รับคะแนนเก็บสะสมไปเรื่อยๆได้ โดยจะมีเวลาเป็นกำหนด หากเวลาหมดจะเป็นการจบเกมโดยปริยาย โดยตัวเลขจะสุ่มทุกครั้งที่ผู้เล่นเริ่มเกม หรือเริ่มเกมใหม่ ทุกการกด เริ่มใหม่จะทำการสุ่มตัวใหม่และลดคะแนนครึ่งของคะแนนที่จะได้รับ"
+    },
+    "level_dfficulty": {
+        "english": "Level of Difficulty",
+        "thai": "ระดับความยาก"
+    },
+    "level_easy": {
+        "english": "Easy",
+        "thai": "ง่าย"
+    },
+    "detail_level_easy": {
+        "english": "This mode will give all players 30 seconds. Players must answer correctly before the time runs out. If the answer is correct, they will get 1 point per question. The numbers are randomly generated from 1 to 10.",
+        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 30 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 1 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 10"
+    },
+    "level_medium": {
+        "english": "Medium",
+        "thai": "ปานกลาง"
+    },
+    "detail_level_medium": {
+        "english": "This mode will give all players 20 seconds. The players must answer correctly before the time runs out. If the answer is correct, they will get 5 points per question. The numbers are randomly generated from 1 to 100.",
+        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 20 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 5 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 100"
+    },
+    "level_hard": {
+        "english": "Hard",
+        "thai": "ยาก"
+    },
+    "detail_level_hard": {
+        "english": "This mode will have a time of 10 seconds for all players. The players have to answer correctly before the time runs out. If they answer correctly, they will get 10 points per question. The number will be randomly selected from 1 to 100.",
+        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 10 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 10 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 100"
+    },
+    "dev": {
+        "english": "Developed by",
+        "thai": "พัฒนาโดย"
+    },
+    "btn_back_to_main": {
+        "english": "Back to main",
+        "thai": "กลับไปยังหน้าแรก"
+    },
+    "name_game": {
+        "english": "Number Guess",
+        "thai": "เกมทายเลข"
+    },
+    "btn_play": {
+        "english": "Play Game",
+        "thai": "เล่นเกม"
+    },
+    "btn_start_play": {
+        "english": "Start Game",
+        "thai": "เริ่มเล่นเกม"
+    },
+    "btn_scoreborad": {
+        "english": "Scoreboard",
+        "thai": "ตารางคะแนน"
+    },
+    "btn_help": {
+        "english": "How to play",
+        "thai": "วิธีเล่น"
+    },
+    "btn_exit": {
+        "english": "Quit Game",
+        "thai": "ออกเกม"
+    },
+    "time_left": {
+        "english": "Time Left",
+        "thai": "เหลือเวลาอีก"
+    },
+    "sec": {
+        "english": "second",
+        "thai": "วินาที"
+    },
+    "end_time": {
+        "english": "Time is over\nThe answer is",
+        "thai": "หมดเวลาแล้ว\nคำตอบคือ"
+    },
+    "number": {
+        "english": "Number",
+        "thai": "เลข"
+    },
+    "too_hight": {
+        "english": "is too high",
+        "thai": "มากไป"
+    },
+    "too_low": {
+        "english": "is too low",
+        "thai": "น้อยไป"
+    },
+    "text_win": {
+        "english": "You're right\nThe answer is",
+        "thai": "คุณตอบถูก \n เฉลยเลข"
+    },
+    "alert_not_number": {
+        "english": "Must type numbers",
+        "thai": "ต้องพิมพ์ตัวเลข"
+    },
+    "input_number": {
+        "english": "Enter the guessing number",
+        "thai": "กรอกตัวเลขที่จะทาย"
+    },
+    "tip": {
+        "english": "Tip: Answer correctly in",
+        "thai": "ทิป: ตอบให้ถูกภายในเวลา"
+    },
+    "restarted": {
+        "english": "New beginning",
+        "thai": "เริ่มต้นใหม่แล้ว"
+    },
+    "restart": {
+        "english": "Replay",
+        "thai": "เริ่มเล่นใหม่"
+    },
+    "send_anwser": {
+        "english": "Send Reply",
+        "thai": "ส่งคำตอบ"
+    },
+    "your_score": {
+        "english": "Your score is",
+        "thai": "คะแนนของคุณคือ"
+    },
+    "play_continue": {
+        "english": "Keep playing",
+        "thai": "เล่นต่อ"
+    },
+    "leaderboard": {
+        "english": "Leaderboard",
+        "thai": "กระดานแสดงคะแนนผู้นำ"
+    },
+    "send_name_board": {
+        "english": "Submit",
+        "thai": "ส่งชื่อ"
+    },
+    "input_name_score": {
+        "english": "Enter player name",
+        "thai": "กรอกชื่อผู้เล่น"
+    },
+    "alert_not_name": {
+        "english": "Please enter your name.",
+        "thai": "กรุณากรอกชื่อ"
+    }
+}

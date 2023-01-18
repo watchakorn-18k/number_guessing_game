@@ -4,8 +4,25 @@ import random
 import pyautogui
 import threading
 import time
+import os
+import json
+import sys
+
+lang = "thai"
 
 
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
+with open(resource_path("src/textAll.json"), "r", encoding="utf-8") as file:
+    data_text = json.load(file)
 # DATABASE #
 import sqlite3
 
@@ -79,7 +96,7 @@ class Countdown(ft.UserControl):
 
     def update_timer(self):
         while self.running:
-            self.countdown.value = f"{self.seconds} วินาที"
+            self.countdown.value = f"{self.seconds} {data_text['sec'][lang]}"
             self.update()
             time.sleep(1)
             if self.seconds > 0:
@@ -115,33 +132,41 @@ class GamePlay(ft.UserControl):
         self.iswinner = False
         self.score = 0
         self.clock = Countdown(self.clock_limit)
-        self.title = ft.Text("เกมทายเลข", style="displaySmall", text_align="center")
+        self.title = ft.Text(
+            data_text["name_game"][lang], style="displaySmall", text_align="center"
+        )
         self.player_guess_number = ft.TextField(
-            label="กรอกตัวเลขที่จะทาย",
-            helper_text=f"ทิป: ตอบให้ถูกภายในเวลา {self.clock_limit} วินาที",
+            label=data_text["input_number"][lang],
+            helper_text=f"{data_text['tip'][lang]} {self.clock_limit} {data_text['sec'][lang]}",
             on_change=self.check_empty_input,
             shift_enter=True,
             on_submit=self.check_answer,
         )
         self.send_answer = ft.ElevatedButton(
-            content=ft.Text("ส่งคำตอบ", size=20),
+            content=ft.Text(data_text["send_anwser"][lang], size=20),
             width=800,
             on_click=self.check_answer,
             disabled=True,
         )
-        self.name_replay = ft.Text("เริ่มเล่นใหม่", size=20, color=ft.colors.WHITE)
+        self.name_replay = ft.Text(
+            data_text["restart"][lang], size=20, color=ft.colors.WHITE
+        )
         self.replay = ft.ElevatedButton(
             content=self.name_replay,
             width=800,
             bgcolor=ft.colors.BLUE,
         )
         self.name_back_to_main = ft.Text(
-            "กลับไปยังหน้าแรก", size=20, color=ft.colors.WHITE
+            data_text["btn_back_to_main"][lang], size=20, color=ft.colors.WHITE
         )
         self.back_to_main = ft.ElevatedButton(
             content=self.name_back_to_main, width=800, bgcolor=ft.colors.RED
         )
-        self.label_score = ft.Text("คะแนนของคุณคือ", size=20, text_align="center")
+        self.label_score = ft.Text(
+            data_text["your_score"][lang],
+            size=25 if lang == "english" else 20,
+            text_align="center",
+        )
         self.hint_answer = ft.Text(
             "เดาให้ถูกหากคุณแน่จริง", size=25, text_align="center"
         )
@@ -171,12 +196,14 @@ class GamePlay(ft.UserControl):
             time.sleep(0.5)
             if self.clock.timeout and not self.iswinner:
                 self.player_guess_number.disabled = True
-                self.hint_answer.value = "หมดเวลาแล้ว\nคำตอบคือ {}".format(self.answer)
+                self.hint_answer.value = "{} {}".format(
+                    data_text["end_time"][lang], self.answer
+                )
                 self.send_answer.disabled = True
                 self.show_score.value = self.score
                 self.hint_answer.color = ft.colors.RED_ACCENT
                 self.hint_answer.size = 25
-                self.name_replay.value = "เริ่มเล่นใหม่"
+                self.name_replay.value = data_text["restart"][lang]
                 self.replay.disabled = True
                 self.replay.opacity = 0.5
                 self.update()
@@ -196,7 +223,7 @@ class GamePlay(ft.UserControl):
         try:
             player = int(self.player_guess_number.value)
             if player == self.answer:
-                self.hint_answer.value = f"คุณตอบถูก \n เฉลยเลข {self.answer}"
+                self.hint_answer.value = f"{data_text['text_win'][lang]} {self.answer}"
                 self.hint_answer.size = 26
                 self.hint_answer.color = ft.colors.GREEN_ACCENT
                 self.send_answer.disabled = True
@@ -209,11 +236,11 @@ class GamePlay(ft.UserControl):
                     self.score_combo += 1
 
                 self.show_score.value = self.score
-                self.name_replay.value = "เล่นต่อ"
+                self.name_replay.value = data_text["play_continue"][lang]
             elif player < self.answer:
-                self.hint_answer.value = f"เลข {self.player_guess_number.value} น้อยไป"
+                self.hint_answer.value = f"{data_text['number'][lang]} {self.player_guess_number.value} {data_text['too_low'][lang]}"
                 self.hint_answer.color = ft.colors.RED_ACCENT
-                self.hint_answer.size = 30
+                self.hint_answer.size = 25 if lang == "english" else 30
                 self.player_guess_number.value = ""
                 self.player_guess_number.focus()
                 self.score_combo -= 2 if self.score_combo > 0 else 0
@@ -222,9 +249,9 @@ class GamePlay(ft.UserControl):
                 self.hint_answer.value = ""
                 self.update()
             elif player > self.answer:
-                self.hint_answer.value = f"เลข {self.player_guess_number.value} มากไป"
+                self.hint_answer.value = f"{data_text['number'][lang]} {self.player_guess_number.value} {data_text['too_hight'][lang]}"
                 self.hint_answer.color = ft.colors.BLUE_ACCENT
-                self.hint_answer.size = 30
+                self.hint_answer.size = 25 if lang == "english" else 30
                 self.player_guess_number.value = ""
                 self.player_guess_number.focus()
                 self.score_combo -= 2 if self.score_combo > 0 else 0
@@ -234,7 +261,7 @@ class GamePlay(ft.UserControl):
                 self.update()
             print(self.score_combo)
         except:
-            self.hint_answer.value = "ต้องพิมพ์ตัวเลข"
+            self.hint_answer.value = data_text["alert_not_number"][lang]
             self.hint_answer.color = ft.colors.RED_ACCENT
         self.update()
 
@@ -254,7 +281,7 @@ class GamePlay(ft.UserControl):
         # ชุด Container
         self.section_time = ft.Container(
             content=ft.Row(
-                [ft.Text("เหลือเวลาอีก"), self.clock],
+                [ft.Text(data_text["time_left"][lang]), self.clock],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             ),
             padding=ft.padding.only(top=10, bottom=10),
@@ -304,7 +331,11 @@ class GamePlay(ft.UserControl):
 class MenuGame(ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
-        self.title = ft.Text("เกมทายเลข", size=50, text_align="center")
+        self.title = ft.Text(
+            data_text["name_game"][lang],
+            size=40 if lang == "english" else 50,
+            text_align="center",
+        )
         self.banner_img = ft.Image(
             src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
             width=100,
@@ -313,7 +344,7 @@ class MenuGame(ft.UserControl):
         )
         self.btn_start = ft.ElevatedButton(
             content=ft.Text(
-                "เล่นเกม",
+                data_text["btn_play"][lang],
                 size=20,
             ),
             width=200,
@@ -322,7 +353,7 @@ class MenuGame(ft.UserControl):
         )
         self.btn_scoreboard = ft.ElevatedButton(
             content=ft.Text(
-                "ตารางคะแนน",
+                data_text["btn_scoreborad"][lang],
                 size=20,
             ),
             width=200,
@@ -330,7 +361,7 @@ class MenuGame(ft.UserControl):
         )
         self.btn_help = ft.ElevatedButton(
             content=ft.Text(
-                "ช่วยเหลือ",
+                data_text["btn_help"][lang],
                 size=20,
             ),
             width=200,
@@ -338,7 +369,7 @@ class MenuGame(ft.UserControl):
         )
         self.btn_exit = ft.ElevatedButton(
             content=ft.Text(
-                "ออกเกม",
+                data_text["btn_exit"][lang],
                 size=20,
             ),
             width=200,
@@ -392,7 +423,11 @@ class MenuGame(ft.UserControl):
 class LevelGame(ft.UserControl):
     def __init__(self) -> None:
         super().__init__()
-        self.title = ft.Text("เกมทายเลข", size=50, text_align="center")
+        self.title = ft.Text(
+            data_text["name_game"][lang],
+            size=25 if lang == "english" else 50,
+            text_align="center",
+        )
         self.banner_img = ft.Image(
             src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
             width=100,
@@ -402,16 +437,16 @@ class LevelGame(ft.UserControl):
         self.dropdown_difficulty_select = ft.Dropdown(
             width=200,
             options=[
-                ft.dropdown.Option(text="ง่าย", key=1),
-                ft.dropdown.Option(text="ปานกลาง", key=2),
-                ft.dropdown.Option(text="ยาก", key=3),
+                ft.dropdown.Option(text=data_text["level_easy"][lang], key=1),
+                ft.dropdown.Option(text=data_text["level_medium"][lang], key=2),
+                ft.dropdown.Option(text=data_text["level_hard"][lang], key=3),
             ],
             autofocus=True,
             value=1,
         )
         self.btn_submit = ft.ElevatedButton(
             content=ft.Text(
-                "เริ่มเล่นเกม",
+                data_text["btn_start_play"][lang],
                 size=20,
             ),
             width=200,
@@ -420,7 +455,7 @@ class LevelGame(ft.UserControl):
         )
         self.btn_back = ft.ElevatedButton(
             content=ft.Text(
-                "กลับไปหน้าแรก",
+                data_text["btn_back_to_main"][lang],
                 size=20,
             ),
             width=200,
@@ -440,7 +475,7 @@ class LevelGame(ft.UserControl):
                                     ),
                                     padding=ft.padding.only(bottom=20),
                                 ),
-                                ft.Text("ระดับความยาก"),
+                                ft.Text(data_text["level_dfficulty"][lang]),
                                 self.dropdown_difficulty_select,
                                 self.btn_submit,
                                 self.btn_back,
@@ -475,25 +510,65 @@ class HelpGame(ft.UserControl):
 
     def __init__(self):
         super().__init__()
-        import os
-        import sys
 
-        def resource_path(relative_path):
-            """Get absolute path to resource, works for dev and for PyInstaller"""
-            try:
-                # PyInstaller creates a temp folder and stores path in _MEIPASS
-                base_path = sys._MEIPASS
-            except Exception:
-                base_path = os.path.abspath(".")
-            return os.path.join(base_path, relative_path)
-
-        self.path_markdown = resource_path("src/how_to_play.md")
-        with open(self.path_markdown, "r", encoding="utf-8") as f:
-            self.filemarkdown = f.read()
-        self.markdown_help = ft.Markdown(
-            self.filemarkdown,
-            selectable=True,
-            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
+        self.content_text = ft.Container(
+            content=ft.Column(
+                [
+                    ft.Text(
+                        data_text["how_to_play"][lang], size=25, text_align="center"
+                    ),
+                    ft.Text(
+                        data_text["detail_how_to_play"][lang],
+                        size=15,
+                        text_align="center",
+                    ),
+                    ft.Text(
+                        data_text["level_dfficulty"][lang], size=25, text_align="center"
+                    ),
+                    ft.Text(
+                        data_text["level_easy"][lang],
+                        size=16,
+                        text_align="center",
+                        color=ft.colors.GREEN_ACCENT_400,
+                    ),
+                    ft.Text(
+                        data_text["detail_level_easy"][lang],
+                        size=13,
+                        text_align="center",
+                        color=ft.colors.GREEN_ACCENT_400,
+                    ),
+                    ft.Text(
+                        data_text["level_medium"][lang],
+                        size=16,
+                        text_align="center",
+                        color=ft.colors.BLUE_ACCENT_400,
+                    ),
+                    ft.Text(
+                        data_text["detail_level_medium"][lang],
+                        size=13,
+                        text_align="center",
+                        color=ft.colors.BLUE_ACCENT_400,
+                    ),
+                    ft.Text(
+                        data_text["level_hard"][lang],
+                        size=16,
+                        text_align="center",
+                        color=ft.colors.ORANGE_ACCENT_400,
+                    ),
+                    ft.Text(
+                        data_text["detail_level_hard"][lang],
+                        size=13,
+                        text_align="center",
+                        color=ft.colors.ORANGE_ACCENT_400,
+                    ),
+                    ft.Text(
+                        data_text["dev"][lang] + " wk-18k",
+                        size=25,
+                        text_align="center",
+                    ),
+                ],
+                horizontal_alignment="center",
+            ),
         )
         self.banner_img = ft.Image(
             src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
@@ -503,7 +578,7 @@ class HelpGame(ft.UserControl):
         )
         self.btn_back = ft.ElevatedButton(
             content=ft.Text(
-                "กลับไปหน้าแรก",
+                data_text["btn_back_to_main"][lang],
                 size=20,
             ),
             width=200,
@@ -515,7 +590,7 @@ class HelpGame(ft.UserControl):
                 [
                     ft.Container(
                         content=ft.Column(
-                            [self.banner_img, self.markdown_help, self.btn_back],
+                            [self.banner_img, self.content_text, self.btn_back],
                             horizontal_alignment="center",
                         ),
                         alignment=ft.alignment.center,
@@ -542,8 +617,6 @@ class Score_add(ft.UserControl):
 
     def __init__(self):
         super().__init__()
-        import os
-        import sys
 
         self.banner_img = ft.Image(
             src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
@@ -552,7 +625,7 @@ class Score_add(ft.UserControl):
             fit=ft.ImageFit.CONTAIN,
         )
         self.label_show_1 = ft.Text(
-            "คะแนนของคุณคือ",
+            data_text["your_score"][lang],
             size=25,
         )
         self.score_show_1 = ft.Text("0", size=78)
@@ -561,7 +634,7 @@ class Score_add(ft.UserControl):
             horizontal_alignment="center",
         )
         self.input_name_player = ft.TextField(
-            label="กรอกชื่อผู้เล่น",
+            label=data_text["input_name_score"][lang],
             width=200,
             max_length=10,
             max_lines=1,
@@ -570,7 +643,7 @@ class Score_add(ft.UserControl):
         )
         self.btn_submit = ft.ElevatedButton(
             content=ft.Text(
-                "ส่งชื่อลงบอร์ด",
+                data_text["send_name_board"][lang],
                 size=20,
             ),
             width=200,
@@ -578,7 +651,7 @@ class Score_add(ft.UserControl):
         )
         self.btn_back = ft.ElevatedButton(
             content=ft.Text(
-                "กลับไปหน้าแรก",
+                data_text["btn_back_to_main"][lang],
                 size=20,
             ),
             width=200,
@@ -626,8 +699,6 @@ class Scoreboard_scene(ft.UserControl):
 
     def __init__(self):
         super().__init__()
-        import os
-        import sys
 
         self.data_query = qurty_database()
         self.banner_img = ft.Image(
@@ -664,7 +735,7 @@ class Scoreboard_scene(ft.UserControl):
             border_radius=22,
         )
         self.label_show_2 = ft.Text(
-            "กระดานแสดงคะแนนผู้นำ",
+            data_text["leaderboard"][lang],
             size=25,
         )
         self.content = ft.Column(
@@ -673,7 +744,7 @@ class Scoreboard_scene(ft.UserControl):
         )
         self.btn_back = ft.ElevatedButton(
             content=ft.Text(
-                "กลับไปหน้าแรก",
+                data_text["btn_back_to_main"][lang],
                 size=20,
             ),
             width=200,
@@ -739,6 +810,7 @@ def main(page: ft.Page):
     window_width, window_height = (500, 925)
     page.window_width = window_width
     page.window_height = window_height
+    lang = "thai"
 
     def setup_center_pos_window() -> None:
         new_viewport_width, new_viewport_height = (
@@ -763,6 +835,7 @@ def main(page: ft.Page):
         """
         change scene to help scene
         """
+        page.scroll = True
         page.add(help_scene_all)
         page.remove(menu_game_all)
 
@@ -839,7 +912,7 @@ def main(page: ft.Page):
             except UnicodeEncodeError:
                 pass
         else:
-            score_add_scene.text_show.value = "กรุณากรอกชื่อ"
+            score_add_scene.text_show.value = data_text["alert_not_name"][lang]
             score_add_scene.text_show.color = ft.colors.RED
         page.update()
 
@@ -854,6 +927,7 @@ def main(page: ft.Page):
         """
         change to menu scene
         """
+
         page.add(menu_game_all)
         page.remove(help_scene_all)
 
@@ -877,17 +951,11 @@ def main(page: ft.Page):
         score_add_scene.text_show.value = ""
         page.update()
 
-    def back_to_menu_main_from_gameplay_Scene(e):
-        """
-        change to menu scene
-        """
-        page.remove(game_play)
-        page.add(menu_game_all)
-
     def go_to_play_scene(e):
         """
         change scene to game
         """
+        page.scroll = False
         game_play.replay.opacity = 1
         game_play.replay.disabled = False
         game_play.score = 0
@@ -896,21 +964,21 @@ def main(page: ft.Page):
         modes = [
             "",
             {
-                "name": "ง่าย",
+                "name": data_text["level_easy"][lang],
                 "time": 30,
                 "rd_range": 10,
                 "score": 1,
                 "color": ft.colors.GREEN,
             },
             {
-                "name": "ปานกลาง",
+                "name": data_text["level_medium"][lang],
                 "time": 20,
                 "rd_range": 100,
                 "score": 5,
                 "color": ft.colors.ORANGE,
             },
             {
-                "name": "ยาก",
+                "name": data_text["level_hard"][lang],
                 "time": 10,
                 "rd_range": 100,
                 "score": 10,
@@ -925,13 +993,21 @@ def main(page: ft.Page):
             print("anwser : ", game_play.answer)
             game_play.score_difficulty = data_difficulty["score"]
             game_play.clock_limit = data_difficulty["time"]
-            game_play.title.value = "เกมทายเลข ({})".format(
-                modes[int(level_difficulty)]["name"]
+            game_play.title.value = "{} ({})".format(
+                data_text["name_game"][lang], modes[int(level_difficulty)]["name"]
             )
-            game_play.player_guess_number.helper_text = (
-                "ทิป: ตอบให้ถูกภายในเวลา {} วินาที".format(data_difficulty["time"])
+            game_play.player_guess_number.helper_text = "{} {} {}".format(
+                data_text["tip"][lang],
+                data_difficulty["time"],
+                data_text["time_left"][lang],
             )
-            game_play.title.size = 25 if data_difficulty["name"] == "ปานกลาง" else 30
+            game_play.title.size = (
+                25
+                if data_difficulty["name"] == "ปานกลาง" and lang == "thai"
+                else 24
+                if lang == "english"
+                else 30
+            )
             game_play.title.color = data_difficulty["color"]
             game_play.clock = Countdown(game_play.clock_limit)
 
@@ -952,10 +1028,8 @@ def main(page: ft.Page):
                 game_play.answer = random.randint(1, data_difficulty["rd_range"])
 
                 print("anwser : ", game_play.answer)
-            game_play.player_guess_number.helper_text = (
-                f"ทิป: ตอบให้ถูกภายในเวลา {game_play.clock_limit} วินาที"
-            )
-            game_play.name_replay.value = "เริ่มเล่นใหม่"
+            game_play.player_guess_number.helper_text = f"{data_text['tip'][lang]} {game_play.clock_limit}  {data_text['sec'][lang]}"
+            game_play.name_replay.value = data_text["restart"][lang]
             game_play.clock.timeout = False
             game_play.player_guess_number.disabled = False
             game_play.player_guess_number.value = ""
@@ -963,7 +1037,7 @@ def main(page: ft.Page):
             game_play.iswinner = False
             game_play.send_answer.disabled = False
             game_play.hint_answer.size = 25
-            game_play.hint_answer.value = "เริ่มใหม่แล้ว"
+            game_play.hint_answer.value = data_text["restarted"][lang]
             game_play.hint_answer.color = ft.colors.BLUE_ACCENT
             game_play.update()
             time.sleep(1.5)
@@ -1033,7 +1107,6 @@ def main(page: ft.Page):
             Setup ของหน้าช่วยเหลือ
             """
             help_scene.btn_back.on_click = back_to_menu_main_from_help_Scene
-            help_scene.markdown_help.on_tap_link = lambda e: page.launch_url(e.data)
 
         def setup_menu_scoreboard_scene():
             """
@@ -1067,7 +1140,7 @@ def main(page: ft.Page):
         # ///////////////////////////
 
         # test
-        # page.add(score_add_all)
+        # page.add(help_scene_all)
         # page.add(scoreboard_scene_all)
 
         # initial start one above all
