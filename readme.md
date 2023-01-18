@@ -76,5 +76,5 @@ v0.2
 
 - [x] เพิ่มปุ่มเปลี่ยนภาษา
 
-<p align="center"><img src="https://cdn.discordapp.com/attachments/585069498986397707/1065307986064576563/image.png"><img src="https://cdn.discordapp.com/attachments/585069498986397707/1065340951926685766/gamedfdsf.gif">
+<p align="center"><img src="https://cdn.discordapp.com/attachments/585069498986397707/1065340951926685766/gamedfdsf.gif">
 </p>
