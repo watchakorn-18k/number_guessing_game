@@ -1,4 +1,4 @@
-<p align="center"><img src="https://media.discordapp.net/attachments/585069498986397707/1060275417304535140/image.png?width=353&height=671"></p>
+<p align="center"><img src="https://media.discordapp.net/attachments/585069498986397707/1065340951926685766/gamedfdsf.gif?width=355&height=671"></p>
 
 # วิธีเล่นเกมทายเลข
 
