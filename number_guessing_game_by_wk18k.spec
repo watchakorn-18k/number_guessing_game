@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='number_guessing_game_by_wk18k',
+    name='Number Guessing Game By wk18k',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
