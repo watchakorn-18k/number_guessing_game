@@ -1441,7 +1441,7 @@ def main(page: ft.Page):
 
         page.add(menu_game_all)
 
-    # setup_center_pos_window()
+    setup_center_pos_window()
     run_game_normal()
     page.update()
 
