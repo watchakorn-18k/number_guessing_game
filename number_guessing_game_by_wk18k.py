@@ -923,25 +923,113 @@ def main(page: ft.Page):
         """
         เปลี่ยนภาษาเป็นภาษาไทย
         """
-        page.update()
-        import os
 
-        save_langauge_game("thai")
-        page.window_destroy()
-        # Restart the script
-        os.execl(sys.executable, sys.executable, *sys.argv)
+        def dlg_check_restart(e):
+            """
+            dialog เช็คว่าจะรีสตาร์ทเกมไหม
+            """
+
+            def close_dlg(e):
+                """
+                ปิด dialog เฉยๆ
+                """
+                dlg_langauge.open = False
+                page.update()
+
+            def close_dlg_langauge(e):
+                """
+                ปิด dialog เฉยๆ
+                """
+                save_langauge_game("thai")
+                dlg_langauge.open = False
+                page.update()
+
+            def close_dlg_langauge_and_restart(e):
+                """
+                ปิด dialog แล้วเปิดโปรแกรมใหม่
+                """
+                dlg_langauge.open = False
+                save_langauge_game("thai")
+                page.update()
+                page.window_destroy()
+                # Restart the script
+                os.execl(sys.executable, sys.executable, *sys.argv)
+
+            dlg_langauge = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("เปิดปิดเกมใหม่"),
+                content=ft.Text(
+                    "การเปลี่ยนภาษาเกมจะต้องเปิดปิดเกมใหม่คุณยินดีหรือไม่ ?"
+                ),
+                actions=[
+                    ft.TextButton("ยินดี", on_click=close_dlg_langauge_and_restart),
+                    ft.TextButton("ยังก่อน", on_click=close_dlg_langauge),
+                ],
+                actions_alignment=ft.MainAxisAlignment.END,
+                on_dismiss=lambda e: print("Modal dialog dismissed!"),
+            )
+
+            def open_dlg_modal(e):
+                page.dialog = dlg_langauge
+                dlg_langauge.open = True
+                page.update()
+
+            open_dlg_modal(e)
+
+        dlg_check_restart(e)
 
     def change_langauge_en(e):
         """
         เปลี่ยนภาษาเป็นภาษาอังกฤษ
         """
-        page.update()
-        import os
 
-        save_langauge_game("english")
-        page.window_destroy()
-        # Restart the script
-        os.execl(sys.executable, sys.executable, *sys.argv)
+        def dlg_check_restart(e):
+            """
+            dialog เช็คว่าจะรีสตาร์ทเกมไหม
+            """
+
+            def close_dlg_langauge(e):
+                """
+                ปิด dialog เฉยๆ และบันทึกภาษา
+                """
+                save_langauge_game("english")
+                dlg_langauge.open = False
+                page.update()
+
+            def close_dlg_langauge_and_restart(e):
+                """
+                ปิด dialog แล้วเปิดโปรแกรมใหม่
+                """
+                dlg_langauge.open = False
+                save_langauge_game("english")
+                page.update()
+                page.window_destroy()
+
+                # Restart the script
+                os.execl(sys.executable, sys.executable, *sys.argv)
+
+            dlg_langauge = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("Restart Game"),
+                content=ft.Text(
+                    "Changing the game language must restart the game, are you willing or not?"
+                ),
+                actions=[
+                    ft.TextButton("Accept", on_click=close_dlg_langauge_and_restart),
+                    ft.TextButton("Later", on_click=close_dlg_langauge),
+                ],
+                actions_alignment=ft.MainAxisAlignment.END,
+                on_dismiss=lambda e: print("Modal dialog dismissed!"),
+            )
+
+            def open_dlg_modal(e):
+                page.dialog = dlg_langauge
+                dlg_langauge.open = True
+                page.update()
+
+            open_dlg_modal(e)
+
+        dlg_check_restart(e)
 
     page.appbar = ft.AppBar(
         leading=ft.Container(
@@ -1181,6 +1269,7 @@ def main(page: ft.Page):
             """
             เล่นอีกครั้ง
             """
+
             def check_score():
                 """
                 เช็คคะแนน
