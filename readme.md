@@ -24,20 +24,20 @@
 
 ## ติดตั้งโครงการ
 
-```py
+```fix
 git clone https://github.com/watchakorn-18k/number_guessing_game
 git cd number_guessing_game
 ```
 
 ## ติดตั้งโมดูลต่างๆ
 
-```
+```fix
 pip install -r requirements.txt
 ```
 
 หรือกรณีมี virtualenv
 
-```
+```fix
 virtualenv game
 
 # บน Linux
@@ -51,7 +51,7 @@ pip install -r requirements.txt
 
 ## เรียกใช้งาน
 
-```
+```fix
 flet num*.py
 ```
 
