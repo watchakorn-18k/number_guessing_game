@@ -8,11 +8,70 @@ import os
 import json
 import sys
 
-lang = "thai"
+lang = ""
+
+
+def check_default_system_langauge():
+    """
+    ดึงภาษาจากตัว OS
+    """
+    import locale
+
+    # Get the current locale
+    current_locale = locale.getdefaultlocale()
+    # Print the current language
+    if current_locale[0] == "en_US" or "en_GB":
+        return "english"
+    elif current_locale[0] == "th-TH":
+        return "thai"
+    else:
+        return "english"
+
+
+def save_default_langauge_game():
+    """
+    บันทึกภาษาที่เลือกในเกมลงไฟล์ json เริ่มต้น
+    """
+    data = {"langauge": check_default_system_langauge()}
+    with open("config.json", "w") as json_file:
+        json.dump(data, json_file)
+
+
+def save_langauge_game(language: str):
+    """
+    บันทึกภาษาที่เลือกในเกมลงไฟล์ json จากการเลือก
+    """
+    data = {"langauge": language}
+    with open("config.json", "w") as json_file:
+        json.dump(data, json_file)
+
+
+def pull_langauge_from_file_json():
+    """
+    ดึงข้อมูลภาษาจาก json
+    """
+    with open("config.json", "r") as json_file:
+        data = json.load(json_file)["langauge"]
+    if data == "english" or data == "thai":
+        return data
+    else:
+        return "english"
+
+
+def change_langauge_in_game():
+    """
+    เปลี่ยนภาษาในเกม
+    """
+    if not os.path.isfile("config.json"):
+        save_default_langauge_game()
+
+
+change_langauge_in_game()
+lang = pull_langauge_from_file_json()
 
 
 def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and for PyInstaller"""
+    """รับเส้นทางที่แน่นอนไปยังทรัพยากร ใช้งานได้กับ dev และสำหรับ PyInstaller"""
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -28,6 +87,9 @@ import sqlite3
 
 
 def create_database():
+    """
+    สร้างฐานข้อมูล
+    """
     # Connect to or create the database
     conn = sqlite3.connect("storage.db")
 
@@ -49,6 +111,9 @@ def create_database():
 
 
 def qurty_database():
+    """
+    แสดงข้อมูลจากฐานข้อมูล
+    """
     conn = sqlite3.connect("storage.db")
 
     # Create a cursor object
@@ -65,6 +130,9 @@ def qurty_database():
 
 
 def check_database():
+    """
+    เช็คว่ามีฐานข้อมูลหรือเปล่าถ้าไม่มีให้สร้าง
+    """
     import os
 
     if not os.path.exists("storage.db"):
@@ -407,6 +475,9 @@ class MenuGame(ft.UserControl):
         print(5)
 
     def btn_style(self, color1, color2, time):
+        """
+        ฟังค์ชั่นเปลี่ยนสไตล์ปุ่ม
+        """
         return ft.ButtonStyle(
             color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
             bgcolor={
@@ -490,6 +561,9 @@ class LevelGame(ft.UserControl):
         )
 
     def btn_style(self, color1, color2, time):
+        """
+        ฟังค์ชั่นเปลี่ยนสไตล์ปุ่ม
+        """
         return ft.ButtonStyle(
             color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
             bgcolor={
@@ -600,6 +674,9 @@ class HelpGame(ft.UserControl):
         )
 
     def btn_style(self, color1, color2, time):
+        """
+        ฟังค์ชั่นเปลี่ยนสไตล์ปุ่ม
+        """
         return ft.ButtonStyle(
             color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
             bgcolor={
@@ -682,6 +759,9 @@ class Score_add(ft.UserControl):
         )
 
     def btn_style(self, color1, color2, time):
+        """
+        ฟังค์ชั่นเปลี่ยนสไตล์ปุ่ม
+        """
         return ft.ButtonStyle(
             color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
             bgcolor={
@@ -770,6 +850,9 @@ class Scoreboard_scene(ft.UserControl):
         )
 
     def resutl_data_list_player_rank(self):
+        """
+        แสดงผลรายชื่ออันดับผู้เล่น
+        """
         self.data_query = qurty_database()
         for index, row in enumerate(self.data_query[1:10]):
             if row[1] != max(qurty_database()):
@@ -795,6 +878,10 @@ class Scoreboard_scene(ft.UserControl):
         return self.lists
 
     def btn_style(self, color1, color2, time):
+        """
+        ฟังค์ชั่นเปลี่ยนสไตล์ปุ่ม
+        """
+
         return ft.ButtonStyle(
             color={ft.MaterialState.DEFAULT.value: ft.colors.WHITE},
             bgcolor={
@@ -806,13 +893,81 @@ class Scoreboard_scene(ft.UserControl):
 
 
 def main(page: ft.Page):
+    """
+    ฟังค์ชั่นหลัก
+    """
     viewport_width, viewport_height = pyautogui.size()
     window_width, window_height = (500, 925)
     page.window_width = window_width
     page.window_height = window_height
-    lang = "thai"
+    page.theme_mode = ft.ThemeMode.DARK
+
+    def theme_changed(e):
+        """
+        เปลี่ยนธีม สว่าง กับ มืด
+        """
+        page.theme_mode = (
+            ft.ThemeMode.DARK
+            if page.theme_mode == ft.ThemeMode.LIGHT
+            else ft.ThemeMode.LIGHT
+        )
+        page.update()
+
+    def link_wk_18k_github(e):
+        """
+        เปิดโปรไฟล์ github wk-18k
+        """
+        page.launch_url("https://github.com/watchakorn-18k")
+
+    def change_langauge_th(e):
+        """
+        เปลี่ยนภาษาเป็นภาษาไทย
+        """
+        page.update()
+        import os
+
+        save_langauge_game("thai")
+        page.window_destroy()
+        # Restart the script
+        os.execl(sys.executable, sys.executable, *sys.argv)
+
+    def change_langauge_en(e):
+        """
+        เปลี่ยนภาษาเป็นภาษาอังกฤษ
+        """
+        page.update()
+        import os
+
+        save_langauge_game("english")
+        page.window_destroy()
+        # Restart the script
+        os.execl(sys.executable, sys.executable, *sys.argv)
+
+    page.appbar = ft.AppBar(
+        leading=ft.Container(
+            content=ft.Image(
+                src="https://avatars.githubusercontent.com/u/74919942?s=40&v=4"
+            ),
+            padding=3,
+            on_click=link_wk_18k_github,
+        ),
+        leading_width=40,
+        actions=[
+            ft.IconButton(ft.icons.WB_SUNNY_OUTLINED, on_click=theme_changed),
+            ft.PopupMenuButton(
+                icon=ft.icons.LANGUAGE,
+                items=[
+                    ft.PopupMenuItem(text="ภาษาไทย", on_click=change_langauge_th),
+                    ft.PopupMenuItem(text="English", on_click=change_langauge_en),
+                ],
+            ),
+        ],
+    )
 
     def setup_center_pos_window() -> None:
+        """
+        ปรับหน้าต่างให้อยู่กึ่งกลางจอ
+        """
         new_viewport_width, new_viewport_height = (
             viewport_width / 2,
             viewport_height / 2,
@@ -828,6 +983,7 @@ def main(page: ft.Page):
         """
         change scene to level scene
         """
+
         page.add(level_scene_all)
         page.remove(menu_game_all)
 
@@ -835,6 +991,7 @@ def main(page: ft.Page):
         """
         change scene to help scene
         """
+
         page.scroll = True
         page.add(help_scene_all)
         page.remove(menu_game_all)
@@ -872,6 +1029,9 @@ def main(page: ft.Page):
         page.update()
 
     def go_to_keep_data_to_database_then_go_2_scoreboard(e):
+        """
+        ไปเก็บข้อมูลลงฐานข้อมูลแล้วก็ไปที่หน้า scoreboard
+        """
         game_play.score += 5 * 1
         if score_add_scene.input_name_player.value != "":
             try:
@@ -895,6 +1055,9 @@ def main(page: ft.Page):
                     score_add_scene.text_show.color = ft.colors.GREEN
 
                     def go_to_scoreboard(e):
+                        """
+                        ไปที่หน้า scoreboard
+                        """
                         page.remove(score_add_all)
                         page.add(scoreboard_scene_all)
                         qurty_database()
@@ -989,6 +1152,9 @@ def main(page: ft.Page):
         data_difficulty = modes[int(level_difficulty)]
 
         def setup_difficulty_level():
+            """
+            ตั้งค่าระดับความยาก
+            """
             game_play.answer = random.randint(1, data_difficulty["rd_range"])
             print("anwser : ", game_play.answer)
             game_play.score_difficulty = data_difficulty["score"]
@@ -1012,7 +1178,13 @@ def main(page: ft.Page):
             game_play.clock = Countdown(game_play.clock_limit)
 
         def replaying_game(e):
+            """
+            เล่นอีกครั้ง
+            """
             def check_score():
+                """
+                เช็คคะแนน
+                """
                 if not game_play.iswinner:
                     game_play.answer = random.randint(1, data_difficulty["rd_range"])
                     print("anwser : ", game_play.answer)
@@ -1059,7 +1231,7 @@ def main(page: ft.Page):
         """
         page.window_destroy()
 
-    # setup_center_pos_window()
+    setup_center_pos_window()
     page.window_to_front()
     page.fonts = {
         "Kanit": "https://raw.githubusercontent.com/google/fonts/master/ofl/kanit/Kanit-Bold.ttf",
