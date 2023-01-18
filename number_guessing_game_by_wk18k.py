@@ -919,6 +919,47 @@ def main(page: ft.Page):
         """
         page.launch_url("https://github.com/watchakorn-18k")
 
+    def alert_use_this_langauage(e):
+        """
+        แจ้งว่าใช้ภาษานี้อยู่
+        """
+
+        def close_dlg(e):
+            """
+            ปิด dialog เฉยๆ
+            """
+            dlg.open = False
+            page.update()
+
+        dlg = ft.AlertDialog(
+            modal=True,
+            content=ft.Text(
+                data_text["alert_use_lang_duplicate"][lang],
+                text_align="center",
+                size=20,
+            ),
+            actions=[
+                ft.Row(
+                    [
+                        ft.TextButton(
+                            content=ft.Text(data_text["close"][lang], size=20),
+                            on_click=close_dlg,
+                        )
+                    ],
+                    alignment="center",
+                )
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: print("Modal dialog dismissed!"),
+        )
+
+        def open_dlg_modal(e):
+            page.dialog = dlg
+            dlg.open = True
+            page.update()
+
+        open_dlg_modal(e)
+
     def change_langauge_th(e):
         """
         เปลี่ยนภาษาเป็นภาษาไทย
@@ -928,13 +969,6 @@ def main(page: ft.Page):
             """
             dialog เช็คว่าจะรีสตาร์ทเกมไหม
             """
-
-            def close_dlg(e):
-                """
-                ปิด dialog เฉยๆ
-                """
-                dlg_langauge.open = False
-                page.update()
 
             def close_dlg_langauge(e):
                 """
@@ -976,7 +1010,7 @@ def main(page: ft.Page):
 
             open_dlg_modal(e)
 
-        dlg_check_restart(e)
+        dlg_check_restart(e) if lang != "thai" else alert_use_this_langauage(e)
 
     def change_langauge_en(e):
         """
@@ -1029,7 +1063,7 @@ def main(page: ft.Page):
 
             open_dlg_modal(e)
 
-        dlg_check_restart(e)
+        dlg_check_restart(e) if lang != "english" else alert_use_this_langauage(e)
 
     page.appbar = ft.AppBar(
         leading=ft.Container(
@@ -1320,7 +1354,6 @@ def main(page: ft.Page):
         """
         page.window_destroy()
 
-    setup_center_pos_window()
     page.window_to_front()
     page.fonts = {
         "Kanit": "https://raw.githubusercontent.com/google/fonts/master/ofl/kanit/Kanit-Bold.ttf",
@@ -1408,6 +1441,7 @@ def main(page: ft.Page):
 
         page.add(menu_game_all)
 
+    # setup_center_pos_window()
     run_game_normal()
     page.update()
 

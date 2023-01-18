@@ -20,6 +20,47 @@
 
 พัฒนาโดย [wk-18k](https://github.com/watchakorn-18k)
 
+# สำหรันนักพัฒนา
+
+## ติดตั้งโครงการ
+
+```py
+git clone https://github.com/watchakorn-18k/number_guessing_game
+git cd number_guessing_game
+```
+
+## ติดตั้งโมดูลต่างๆ
+
+```
+pip install -r requirements.txt
+```
+
+หรือกรณีมี virtualenv
+
+```
+virtualenv game
+
+# บน Linux
+source game/bin/activate
+pip install -r requirements.txt
+
+# บน Windows
+env_1\Scripts\activate
+pip install -r requirements.txt
+```
+
+## เรียกใช้งาน
+
+```
+flet num*.py
+```
+
+## สร้างไฟล์ EXE
+
+```
+pyinstaller number_guessing_game_by_wk18k.spec
+```
+
 # Changelog
 
 v0.1

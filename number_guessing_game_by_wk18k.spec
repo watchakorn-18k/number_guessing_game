@@ -8,7 +8,7 @@ a = Analysis(
     ['number_guessing_game_by_wk18k.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/how_to_play.md', 'src'), ('src/icon.ico', 'src')],
+    datas=[('src/textAll.json', 'src'), ('src/icon.ico', 'src')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

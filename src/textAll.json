@@ -142,5 +142,13 @@
     "alert_not_name": {
         "english": "Please enter your name.",
         "thai": "กรุณากรอกชื่อ"
+    },
+    "alert_use_lang_duplicate": {
+        "english": "You are currently using this language.",
+        "thai": "คุณกำลังใช้ภาษานี้อยู่"
+    },
+    "close": {
+        "english": "Close",
+        "thai": "ปิด"
     }
 }
