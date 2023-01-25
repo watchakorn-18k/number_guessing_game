@@ -238,7 +238,7 @@ class GamePlay(ft.UserControl):
         self.hint_answer = ft.Text(
             "เดาให้ถูกหากคุณแน่จริง", size=25, text_align="center"
         )
-        self.show_score = ft.Text(self.score, size=150, text_align="center")
+        self.show_score = ft.Text(self.score, size=120, text_align="center")
         self.hint_answer = ft.Text(
             "เดาให้ถูกหากคุณแน่จริง", size=25, text_align="center"
         )
