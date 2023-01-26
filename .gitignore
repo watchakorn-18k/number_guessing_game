@@ -2,7 +2,7 @@ dist
 build
 env_1
 test.py
-/.vscode/
+/.vscode
 storage.db
 presentation.md
 config.json
