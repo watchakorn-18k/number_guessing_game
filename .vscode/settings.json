@@ -1,4 +1,0 @@
-{
-    "python.formatting.provider": "black",
-    "docwriter.style": "Auto-detect"
-}
