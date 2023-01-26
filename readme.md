@@ -45,7 +45,7 @@ source game/bin/activate
 pip install -r requirements.txt
 
 # บน Windows
-env_1\Scripts\activate
+game\Scripts\activate
 pip install -r requirements.txt
 ```
 

@@ -110,7 +110,7 @@ def create_database():
     conn.close()
 
 
-def qurty_database():
+def query_database():
     """
     แสดงข้อมูลจากฐานข้อมูล
     """
@@ -244,13 +244,20 @@ class GamePlay(ft.UserControl):
         )
 
         def set_time_out(e):
+            # The above code is checking if the time is greater than the timeout. If it is, then it
+            # sets the timeout to True.
             self.clock.timeout = True
 
         self.debug_set_time_out = ft.ElevatedButton(
-            text="TIME_OUT", on_click=set_time_out
+            # Creating a button that will call the function set_time_out when clicked.
+            text="TIME_OUT",
+            on_click=set_time_out,
         )
 
     def did_mount(self):
+        """
+        > The `did_mount` function is called when the component is mounted to the DOM
+        """
         self.running = True
         self.th = threading.Thread(target=self.update_forever, args=(), daemon=True)
         self.th.start()
@@ -780,7 +787,7 @@ class Scoreboard_scene(ft.UserControl):
     def __init__(self):
         super().__init__()
 
-        self.data_query = qurty_database()
+        self.data_query = query_database()
         self.banner_img = ft.Image(
             src=f"https://cdn.discordapp.com/attachments/585069498986397707/1054391841690226759/box_318-871209.png",
             width=50,
@@ -853,9 +860,9 @@ class Scoreboard_scene(ft.UserControl):
         """
         แสดงผลรายชื่ออันดับผู้เล่น
         """
-        self.data_query = qurty_database()
+        self.data_query = query_database()
         for index, row in enumerate(self.data_query[1:10]):
-            if row[1] != max(qurty_database()):
+            if row[1] != max(query_database()):
                 self.rank_text = ft.Text(
                     index + 2,
                     size=18,
@@ -1113,7 +1120,6 @@ def main(page: ft.Page):
         """
         change scene to help scene
         """
-
         page.scroll = True
         page.add(help_scene_all)
         page.remove(menu_game_all)
@@ -1124,13 +1130,11 @@ def main(page: ft.Page):
         """
         page.remove(menu_game_all)
         page.add(scoreboard_scene_all)
-        qurty_database()
         scoreboard_scene.list_player_rank.content = ft.Column(
             scoreboard_scene.resutl_data_list_player_rank()
         )
-        scoreboard_scene.rank_1_name.value = qurty_database()[0][0]
-        scoreboard_scene.rank_1_score.value = qurty_database()[0][1]
-
+        scoreboard_scene.rank_1_name.value = query_database()[0][0]
+        scoreboard_scene.rank_1_score.value = query_database()[0][1]
         page.update()
 
     def go_to_score_add_Scene(e):
@@ -1182,15 +1186,13 @@ def main(page: ft.Page):
                         """
                         page.remove(score_add_all)
                         page.add(scoreboard_scene_all)
-                        qurty_database()
                         scoreboard_scene.list_player_rank.content = ft.Column(
                             scoreboard_scene.resutl_data_list_player_rank()
                         )
-                        scoreboard_scene.rank_1_name.value = qurty_database()[0][0]
-                        scoreboard_scene.rank_1_score.value = qurty_database()[0][1]
+                        scoreboard_scene.rank_1_name.value = query_database()[0][0]
+                        scoreboard_scene.rank_1_score.value = query_database()[0][1]
                         score_add_scene.input_name_player.value = ""
                         score_add_scene.text_show.value = ""
-
                         page.update()
 
                     go_to_scoreboard(e)
@@ -1212,7 +1214,7 @@ def main(page: ft.Page):
         """
         change to menu scene
         """
-
+        page.scroll = False
         page.add(menu_game_all)
         page.remove(help_scene_all)
 
@@ -1257,14 +1259,14 @@ def main(page: ft.Page):
             },
             {
                 "name": data_text["level_medium"][lang],
-                "time": 20,
+                "time": 30,
                 "rd_range": 100,
                 "score": 5,
                 "color": ft.colors.ORANGE,
             },
             {
                 "name": data_text["level_hard"][lang],
-                "time": 10,
+                "time": 20,
                 "rd_range": 100,
                 "score": 10,
                 "color": ft.colors.RED,

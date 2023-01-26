@@ -25,7 +25,7 @@
     },
     "detail_level_medium": {
         "english": "This mode will give all players 20 seconds. The players must answer correctly before the time runs out. If the answer is correct, they will get 5 points per question. The numbers are randomly generated from 1 to 100.",
-        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 20 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 5 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 100"
+        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 30 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 5 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 100"
     },
     "level_hard": {
         "english": "Hard",
@@ -33,7 +33,7 @@
     },
     "detail_level_hard": {
         "english": "This mode will have a time of 10 seconds for all players. The players have to answer correctly before the time runs out. If they answer correctly, they will get 10 points per question. The number will be randomly selected from 1 to 100.",
-        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 10 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 10 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 100"
+        "thai": "โหมดนี้จะมีเวลาให้ผู้เล่นทั้งหมด 20 วินาที โดยผู้เล่นจะต้องตอบให้ถูกก่อนที่เวลาจะหมด หากตอบถูกจะได้คะแนนข้อละ 10 คะแนน สุ่มตัวเลขตั้งแต่ 1 - 100"
     },
     "dev": {
         "english": "Developed by",
