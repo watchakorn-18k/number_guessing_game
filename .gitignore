@@ -5,4 +5,5 @@ test.py
 /.vscode/
 storage.db
 presentation.md
-/Number guessing game
+/Number guessing 
+config.json
