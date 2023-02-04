@@ -1158,6 +1158,7 @@ def main(page: ft.Page):
         """
         ไปเก็บข้อมูลลงฐานข้อมูลแล้วก็ไปที่หน้า scoreboard
         """
+        game_play.score += 5 * 1
         if score_add_scene.input_name_player.value != "":
             try:
                 if (

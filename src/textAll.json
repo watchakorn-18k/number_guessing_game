@@ -132,8 +132,8 @@
         "thai": "กระดานแสดงคะแนนผู้นำ"
     },
     "send_name_board": {
-        "english": "Submit",
-        "thai": "ส่งชื่อ"
+        "english": "Save Statistics",
+        "thai": "บันทึกสถิติ"
     },
     "input_name_score": {
         "english": "Enter player name",
